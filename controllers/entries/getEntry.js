@@ -7,7 +7,7 @@ const getEntry = async (req, res, next) => {
 
     const { id } = req.params;
     const [result] = await connection.query(
-      `SELECT photo_id, img_url, user_id, description, placephoto, created_at FROM photo where photo_id= ?`,
+      `SELECT id_photos, url, description, place, created_at, id_users FROM photos where id_photos = ?`,
 
       [id]
     );

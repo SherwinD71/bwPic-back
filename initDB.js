@@ -82,7 +82,7 @@ async function main() {
 
     for (let index = 0; index < numeroDeEntradas; index++) {
       await connection.query(`
-  INSERT INTO users (username, name, email, userphoto, password, created_at, active )
+  INSERT INTO users (username, name, email, userphoto, password, created_at, active, lastAuthUpdate )
   VALUES (
            "${faker.internet.userName()}",
            "${faker.name.firstName()}",
@@ -90,7 +90,8 @@ async function main() {
            "${faker.image.avatar()}",
            "${faker.internet.password()}",
            "${formatDateToDB(new Date())}",
-           "${random(0, 1)}"
+           "${random(0, 1)}",
+           "${formatDateToDB(new Date())}"
   )
   `);
     }
@@ -111,36 +112,37 @@ async function main() {
      )
      `);
     }
-
+    // crear comentarios
     const crearComentarios = 20;
     for (let index = 0; index < crearComentarios; index++) {
       await connection.query(`
-   INSERT INTO comments (comment_text, created_at, id_photos, id_users)
-  VALUES (
+     INSERT INTO comments (comment_text, created_at, id_photos, id_users)
+    VALUES (
 
-          "${faker.lorem.words()}",
-          "${formatDateToDB(new Date())}"
-          "${random(1, fotosEntradas)}",
-          "${random(1, numeroDeEntradas)}"
+            "${faker.lorem.words()}",
+            "${formatDateToDB(new Date())}",
+            "${random(1, fotosEntradas)}",
+            "${random(1, numeroDeEntradas)}"
 
-  )
-  `);
+    )
+    `);
     }
 
     //   //generar votos
-    //   const crearVotos = 2000;
+    const crearVotos = 20;
 
-    //   for (let index = 0; index < crearVotos; index++) {
-    //     await connection.query(`
-    //   INSERT INTO likes (vote, photo_id, created_at)
-    //   VALUES (
+    for (let index = 0; index < crearVotos; index++) {
+      await connection.query(`
+      INSERT INTO likes (vote, created_at,id_photos, id_users)
+      VALUES (
 
-    //            "${random(0, 1)}",
-    //            "${random(1, fotosEntradas)}",
-    //            "${formatDateToDB(new Date())}"
-    //   )
-    //   `);
-    //   }
+               "${random(0, 1)}",
+               "${formatDateToDB(new Date())}",
+               "${random(1, fotosEntradas)}",
+               "${random(1, numeroDeEntradas)}"
+      )
+      `);
+    }
   } catch (error) {
     console.error(error);
   } finally {
