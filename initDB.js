@@ -9,11 +9,13 @@ async function main() {
   try {
     connection = await getDB();
 
+    // drop tablas
     await connection.query(`DROP TABLE IF EXISTS likes`);
     await connection.query(`DROP TABLE IF EXISTS comments`);
     await connection.query(`DROP TABLE IF EXISTS photos`);
     await connection.query(`DROP TABLE IF EXISTS users`);
 
+    // tabla users
     await connection.query(`
     CREATE TABLE users (
       id_users INT NOT NULL AUTO_INCREMENT,
@@ -33,6 +35,7 @@ async function main() {
     
     `);
 
+    // tabla photos
     await connection.query(`
     CREATE TABLE photos (
       id_photos INT NOT NULL AUTO_INCREMENT,
@@ -46,6 +49,7 @@ async function main() {
     
     `);
 
+    // tabla comments
     await connection.query(`
     CREATE TABLE comments (
       id_comments INT NOT NULL AUTO_INCREMENT,
@@ -58,6 +62,7 @@ async function main() {
       FOREIGN KEY (id_users) REFERENCES users(id_users))
     `);
 
+    //tabla likes
     await connection.query(`
     CREATE TABLE likes (
       id_likes INT NOT NULL AUTO_INCREMENT,
