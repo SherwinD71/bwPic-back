@@ -6,7 +6,12 @@ const listEntries = async (req, res, next) => {
     connection = await getDB();
     let result;
 
-    [result] = await connection.query(`select * from users;`);
+    [result] =
+      await connection.query(`select photos.url, users.username, photos.created_at, sum(likes.vote) , photos.id_photos from photos
+    join users on photos.id_users=users.id_users 
+    join likes on likes.id_photos=photos.id_photos
+    group by photos.id_photos, likes.vote
+    order by  photos.created_at  desc;`);
 
     res.send({
       status: "ok",
