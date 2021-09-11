@@ -7,7 +7,10 @@ const getEntry = async (req, res, next) => {
 
     const { id } = req.params;
     const [result] = await connection.query(
-      `SELECT id_photos, url, description, place, created_at, id_users FROM photos where id_photos = ?`,
+      `SELECT photos.url,users.username, photos.created_at, sum(likes.vote) as votos FROM photos 
+      join users on photos.id_users=users.id_users 
+      join likes on likes.id_photos=photos.id_photos
+      where photos.id_photos = ?`,
 
       [id]
     );
