@@ -1,7 +1,3 @@
-CREATE DATABASE bwpic;
-
-USE bwpic;
-
 #borrado de tablas si existen
 
 DROP TABLE IF EXISTS likes;
@@ -59,3 +55,19 @@ CREATE TABLE likes (
       id_users INT NOT NULL,
       FOREIGN KEY (id_users) REFERENCES users(id_users),
       UNIQUE(id_photos,id_users));
+
+      
+      
+select * from users;
+select * from photos;
+select * from comments;    
+select * from likes;  
+
+update photos set created_at= "2021-09-09 13:20:32" where id_photos = 2;
+
+select * from photos order by created_at desc;
+
+      
+      
+      
+      

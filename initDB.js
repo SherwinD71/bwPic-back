@@ -1,6 +1,7 @@
 const faker = require("faker");
 const getDB = require("./db");
 const { formatDateToDB } = require("./helpers");
+const { yourRandomGenerator } = require("./helpers");
 const { random } = require("lodash");
 
 let connection;
@@ -72,8 +73,7 @@ async function main() {
       id_photos INT NOT NULL,
       FOREIGN KEY (id_photos) REFERENCES photos(id_photos),
       id_users INT NOT NULL,
-      FOREIGN KEY (id_users) REFERENCES users(id_users),
-      UNIQUE(id_photos,id_users))
+      FOREIGN KEY (id_users) REFERENCES users(id_users))
     `);
 
     //introducir usuarios faker
@@ -81,6 +81,7 @@ async function main() {
     const numeroDeEntradas = 10;
 
     for (let index = 0; index < numeroDeEntradas; index++) {
+      let time = yourRandomGenerator(20, 8, 2);
       await connection.query(`
   INSERT INTO users (username, name, email, userphoto, password, created_at, active, lastAuthUpdate )
   VALUES (
@@ -91,7 +92,7 @@ async function main() {
            "${faker.internet.password()}",
            "${formatDateToDB(new Date())}",
            "${random(0, 1)}",
-           "${formatDateToDB(new Date())}"
+           "${formatDateToDB(time)}"
   )
   `);
     }
@@ -100,6 +101,7 @@ async function main() {
     const fotosEntradas = 20;
 
     for (let index = 0; index < fotosEntradas; index++) {
+      let time = yourRandomGenerator(20, 8, 2);
       await connection.query(`
      INSERT INTO photos (url, description, place, created_at, id_users)
      VALUES (
@@ -107,7 +109,7 @@ async function main() {
               "${faker.image.image()}",
               "${faker.lorem.paragraph()}",
               "${faker.address.city()}",
-              "${formatDateToDB(new Date())}",
+              "${formatDateToDB(time)}",
               "${random(1, numeroDeEntradas)}"
      )
      `);
@@ -115,12 +117,13 @@ async function main() {
     // crear comentarios
     const crearComentarios = 20;
     for (let index = 0; index < crearComentarios; index++) {
+      let time = yourRandomGenerator(20, 8, 2);
       await connection.query(`
      INSERT INTO comments (comment_text, created_at, id_photos, id_users)
     VALUES (
 
             "${faker.lorem.words()}",
-            "${formatDateToDB(new Date())}",
+            "${formatDateToDB(time)}",
             "${random(1, fotosEntradas)}",
             "${random(1, numeroDeEntradas)}"
 
@@ -132,12 +135,13 @@ async function main() {
     const crearVotos = 20;
 
     for (let index = 0; index < crearVotos; index++) {
+      let time = yourRandomGenerator(20, 8, 2);
       await connection.query(`
       INSERT INTO likes (vote, created_at,id_photos, id_users)
       VALUES (
 
                "${random(0, 1)}",
-               "${formatDateToDB(new Date())}",
+               "${formatDateToDB(time)}",
                "${random(1, fotosEntradas)}",
                "${random(1, numeroDeEntradas)}"
       )
