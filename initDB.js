@@ -151,6 +151,7 @@ async function main() {
     console.error(error);
   } finally {
     if (connection) connection.release();
+    process.exit(0);
   }
 }
 
