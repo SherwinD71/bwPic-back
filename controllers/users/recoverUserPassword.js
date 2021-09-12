@@ -6,16 +6,17 @@ const recoverUserPassword = async (req, res, next) => {
   try {
     connection = await getDB();
 
-       const { email } = req.body;
+    // sacamos el correo desde el body
+    const { email } = req.body;
 
-    
+    // si no llega en el body el email salgo con error
     if (!email) {
       const error = new Error("Faltan campos");
       error.httpStatus = 400;
       throw error;
     }
 
-    
+    // comprobar que la email exista (usuario exista) en el DB
     const [currentEmail] = await connection.query(
       `
         SELECT id_users
@@ -31,10 +32,10 @@ const recoverUserPassword = async (req, res, next) => {
       throw error;
     }
 
-    
+    // generamos un codigo de recuperación
     const recoverCode = generateRandomString();
 
-    
+    //guardarlo en la base de datos
     await connection.query(
       `
         UPDATE users
@@ -44,7 +45,7 @@ const recoverUserPassword = async (req, res, next) => {
       [recoverCode, email]
     );
 
-    
+    // enviar el email
     const emailBody = `
       Se solicitó el cambio de contraseña en B&WPic.
       El codigo de recuperación es: ${recoverCode}
@@ -58,7 +59,7 @@ const recoverUserPassword = async (req, res, next) => {
       body: emailBody,
     });
 
-    
+    // dar una respuesta al front
     res.send({
       status: "ok",
       message: "Email enviado",

@@ -5,18 +5,21 @@ const getUser = async (req, res, next) => {
   try {
     connection = await getDB();
 
+    // saco el usuario desde la url
     const { id } = req.params;
 
-    
+    // saco la info del usuario
     const [user] = await connection.query(
       `
-     SELECT id_users, created_at, email, name, userphoto, role
+     SELECT id_users, created_at, email, name, username, userphoto , role
      FROM users
      WHERE id_users=?
     `,
       [id]
     );
 
+    // si el usuario logueado es admin o el usuario legueado cincide con
+    // el usuario de lo que pido info, devuelvo toda la información del usuario
     const userInfo = {
       name: user[0].name,
       avatar: user[0].avatar,
