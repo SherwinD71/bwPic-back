@@ -7,7 +7,7 @@ const validateUser = async (req, res, next) => {
 
     const { registrationCode } = req.params;
 
-    
+    // comprobar que en la base de datos hay un usuario con este registrationCode
     const [user] = await connection.query(
       `
       SELECT id_users
@@ -25,7 +25,7 @@ const validateUser = async (req, res, next) => {
       throw error;
     }
 
-    
+    // activar el usuario y a quitarle el registration code
     await connection.query(
       `
       UPDATE users

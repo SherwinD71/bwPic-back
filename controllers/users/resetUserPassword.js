@@ -7,7 +7,7 @@ const resetUserPassword = async (req, res, next) => {
 
     const { recovercode, newpassword } = req.body;
 
-    
+    // comprobar si existe en la base de datos un usuario con este recover code
     const [user] = await connection.query(
       `
             SELECT id_users
@@ -23,7 +23,7 @@ const resetUserPassword = async (req, res, next) => {
       throw error;
     }
 
-    
+    // guardar la nueva contraseña
     await connection.query(
       `
         UPDATE users

@@ -8,14 +8,15 @@ const loginUser = async (req, res, next) => {
 
     const { email, password } = req.body;
 
-    
+    // controlo si email y password están vacios
     if (!email || !password) {
       const error = new Error("Faltan campos");
       error.httpStatus = 400;
       throw error;
     }
 
-    
+    // busco en la base de datos el usuario con email y password que llegaron en
+    // el body de la petición
     const [user] = await connection.query(
       `
       SELECT id_users, role, active
@@ -31,13 +32,16 @@ const loginUser = async (req, res, next) => {
       throw error;
     }
 
-    
+    //console.log(user[0].active);
+
+    // compruebo si el usuario está activo
     if (!user[0].active) {
-      const error = new Error("El usuario no está activo. Comprueba tu email.");
+      const error = new Error("El usuario no etsá activo. Comprueba tu email.");
       error.httpStatus = 401;
       throw error;
     }
 
+    // si todo está bien devolvemos un json con los datos de login
     const info = {
       id: user[0].id,
       role: user[0].role,

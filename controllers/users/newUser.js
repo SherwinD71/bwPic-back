@@ -8,9 +8,12 @@ const newUser = async (req, res, next) => {
     connection = await getDB();
 
     const { email, password } = req.body;
-    
+    //console.log(email, password);
+
+    // valido los datos del body
     await validate(newUserSchema, req.body);
 
+    // compruebo que no exista en la base de datos un usuario con esta email
     const [existingUser] = await connection.query(
       `
       SELECT id_users
@@ -26,10 +29,11 @@ const newUser = async (req, res, next) => {
       throw error;
     }
 
-    
+    // genero un registrationCode (ej: sbdhfbud809urut9304)
     const registrationCode = generateRandomString();
-    
-    
+    //console.log("registrationCode:", registrationCode);
+
+    // añado el usuario a la base de datos (con registrationCode=sbdhfbud809urut9304)
     await connection.query(
       `
       INSERT INTO users(created_at,email,password,registrationCode)
@@ -38,7 +42,8 @@ const newUser = async (req, res, next) => {
       [new Date(), email, password, registrationCode]
     );
 
-    
+    // envio un correo con link de activacion:
+    // http://127.0.0.1:3000/users/validate/sbdhfbud809urut9304
     const emailBody = `
       Te acabas de registrar en B&WPic.
       Pulsa aqui para validar tu usuario: ${process.env.PUBLIC_HOST}/users/validate/${registrationCode}
