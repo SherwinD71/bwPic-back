@@ -7,11 +7,17 @@ const listEntries = async (req, res, next) => {
     let result;
 
     [result] =
-      await connection.query(`select photos.url, users.username, photos.created_at, sum(likes.vote) , photos.id_photos from photos
-    join users on photos.id_users=users.id_users 
-    join likes on likes.id_photos=photos.id_photos
-    group by photos.id_photos, likes.vote
-    order by  photos.created_at  desc;`);
+      await connection.query(`SELECT p.id_photos, url, place, p.created_at, p.id_users, username, SUM(vote) as likes, numComentarios
+      FROM photos AS p
+      LEFT JOIN likes ON (p.id_photos = likes.id_photos)
+      LEFT JOIN users ON (p.id_users = users.id_users)
+      LEFT JOIN (
+      SELECT id_photos, count(id_comments) AS numComentarios
+      FROM comments
+      GROUP BY id_photos
+      ) AS c ON (p.id_photos = c.id_photos)
+      GROUP BY p.id_photos order by p.created_at desc;
+      `);
 
     res.send({
       status: "ok",
