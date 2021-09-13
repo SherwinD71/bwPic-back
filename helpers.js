@@ -13,6 +13,7 @@ function formatDateToDB(dateObject) {
 }
 
 const { UPLOAD_DIRECTORY } = process.env;
+console.log(UPLOAD_DIRECTORY);
 
 const uploadDir = path.join(__dirname, UPLOAD_DIRECTORY);
 
