@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
+const isUser = require("./middlewares/isUser");
 const {
   listEntries,
   newEntry,
@@ -8,6 +9,8 @@ const {
   modEntry,
   deleteEntry,
 } = require("./controllers/entries");
+
+const { newUser, loginUser } = require("./controllers/users");
 
 const { PORT, HOST } = process.env;
 
@@ -24,11 +27,23 @@ app.get("/", (req, res, next) => {
   });
 });
 
+/*
+ENDPOINT ENTRIES
+*/
 app.get("/entries", listEntries);
 app.get("/entries/:id", getEntry);
-app.post("/entries", newEntry);
+app.post("/entries", isUser);
 app.put("/entries/:id", modEntry);
 app.delete("/entries/:id", deleteEntry);
+
+/*
+ENDPOINT USUARIOS
+*/
+
+// Nuevo usuario
+app.post("/users", newUser);
+// Login usuario
+app.post("/users/login", loginUser);
 
 app.use((error, req, res, next) => {
   res.status(error.HttpStatus || 500).send({
@@ -40,7 +55,7 @@ app.use((error, req, res, next) => {
 app.use((req, res, next) => {
   res.status(404).send({
     status: "error",
-    message: "No encontrado",
+    message: "Ruta no encontrada",
   });
 });
 

@@ -4,9 +4,6 @@ const path = require("path");
 const sharp = require("sharp");
 const uuid = require("uuid");
 const crypto = require("crypto");
-const sgMail = require("@sendgrid/mail");
-// Configuro sendgrid
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 function formatDateToDB(dateObject) {
   return format(dateObject, "yyyy-MM-dd HH:mm:ss");
@@ -33,7 +30,7 @@ async function savePhoto(fotoData) {
   // generar un nombre unico para la imagen (UUID)
   const saveImageName = `${uuid.v4()}.jpg`;
 
-  // guardo la imagen en static/upload
+  // guardo la imagen en static/images
   await image.toFile(path.join(uploadDir, saveImageName));
 
   // devuelvo el nombre de la photo
@@ -42,32 +39,12 @@ async function savePhoto(fotoData) {
 
 async function deletePhoto(imageName) {
   const pathImage = path.join(uploadDir, imageName);
+  console.log(path.join(uploadDir, imageName));
   await unlink(pathImage);
 }
 
 function generateRandomString() {
   return crypto.randomBytes(40).toString("hex");
-}
-
-async function sendMail({ to, subject, body }) {
-  try {
-    // https://www.npmjs.com/package/sendgrid
-    const msg = {
-      to,
-      from: process.env.SENDGRID_FROM, //poner el mismo correo que pusimos en FROM de sendgrid
-      subject,
-      text: body,
-      html: `
-    <div>
-      <h1>${subject}</h1>
-      <p>${body}</p>
-    </div>
-    `,
-    };
-    await sgMail.send(msg);
-  } catch (error) {
-    throw new Error("Error enviando email");
-  }
 }
 
 async function validate(schema, data) {
@@ -96,6 +73,5 @@ module.exports = {
   savePhoto,
   deletePhoto,
   generateRandomString,
-  sendMail,
   validate,
 };

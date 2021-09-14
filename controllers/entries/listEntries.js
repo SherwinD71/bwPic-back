@@ -27,7 +27,6 @@ const listEntries = async (req, res, next) => {
     next(error);
   } finally {
     if (connection) connection.release();
-    process.exit(0);
   }
 };
 

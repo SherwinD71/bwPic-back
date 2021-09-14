@@ -1,5 +1,5 @@
 const getDB = require("../../db");
-const { generateRandomString, sendMail, validate } = require("../../helpers");
+const { generateRandomString, validate } = require("../../helpers");
 const { newUserSchema } = require("../../schemas");
 
 const newUser = async (req, res, next) => {
@@ -7,7 +7,7 @@ const newUser = async (req, res, next) => {
   try {
     connection = await getDB();
 
-    const { email, password } = req.body;
+    const { email, password, username, name } = req.body;
     //console.log(email, password);
 
     // valido los datos del body
@@ -30,35 +30,22 @@ const newUser = async (req, res, next) => {
     }
 
     // genero un registrationCode (ej: sbdhfbud809urut9304)
-    const registrationCode = generateRandomString();
+    //const registrationCode = generateRandomString();
     //console.log("registrationCode:", registrationCode);
 
     // añado el usuario a la base de datos (con registrationCode=sbdhfbud809urut9304)
     await connection.query(
       `
-      INSERT INTO users(created_at,email,password,registrationCode)
-      VALUES (?,?,SHA2(?, 512),?)
+      INSERT INTO users(created_at,email,password, username, name)
+      VALUES (?,?,SHA2(?, 512),?, ?)
     `,
-      [new Date(), email, password, registrationCode]
+      [new Date(), email, password, username, name]
     );
-
-    // envio un correo con link de activacion:
-    // http://127.0.0.1:3000/users/validate/sbdhfbud809urut9304
-    const emailBody = `
-      Te acabas de registrar en B&WPic.
-      Pulsa aqui para validar tu usuario: ${process.env.PUBLIC_HOST}/users/validate/${registrationCode}
-    `;
-
-    sendMail({
-      to: email,
-      subject: "Activa tu usuario de B&WPic",
-      body: emailBody,
-    });
 
     // mando una respuesta
     res.send({
       status: "ok",
-      message: "Nuevo usuario creado. Comprueba tu correo para activarlo.",
+      message: "Nuevo usuario creado.",
     });
   } catch (error) {
     next(error);
