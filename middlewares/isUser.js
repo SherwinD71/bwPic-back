@@ -7,7 +7,7 @@ const isUser = async (req, res, next) => {
     connection = await getDB();
 
     const { authorization } = req.headers;
-    // console.log("Controlo login usuario. Token:", authorization);
+    console.log("isUser");
 
     // comprobar que la petición tenga el token (authorization)
     if (!authorization) {
@@ -21,27 +21,6 @@ const isUser = async (req, res, next) => {
     try {
       tokenInfo = jwt.verify(authorization, process.env.SECRET);
     } catch (err) {
-      const error = new Error("Token no valido");
-      error.httpStatus = 401;
-      throw error;
-    }
-
-    //console.log(tokenInfo);
-
-    // voy a leer en la base de datos lastAuthUdate
-    const [result] = await connection.query(
-      `
-      SELECT lastAuthUpdate
-      FROM users
-      WHERE id_users=?
-    `,
-      [tokenInfo.id]
-    );
-
-    const lastAuthUdate = new Date(result[0].lastAuthUpdate);
-    const tokenEmissionDate = new Date(tokenInfo.iat * 1000);
-
-    if (tokenEmissionDate < lastAuthUdate) {
       const error = new Error("Token no valido");
       error.httpStatus = 401;
       throw error;

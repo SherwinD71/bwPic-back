@@ -1,10 +1,12 @@
 const getDB = require("../../db");
 
-const listEntries = async (req, res, next) => {
+const listPhotos = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
     let result;
+
+    //FIXME añadir filtro y id usuario para ver solo las fotos de un usuario
 
     [result] =
       await connection.query(`SELECT p.id_photos, url, place, p.created_at, p.id_users, username, SUM(vote) as likes, numComentarios
@@ -30,4 +32,4 @@ const listEntries = async (req, res, next) => {
   }
 };
 
-module.exports = listEntries;
+module.exports = listPhotos;

@@ -28,10 +28,6 @@ async function main() {
       created_at DATETIME NOT NULL,
       active BOOLEAN DEFAULT true,
       role ENUM("admin","normal") DEFAULT "normal" NOT NULL,
-      registrationCode VARCHAR(100),
-      deleted BOOLEAN DEFAULT false,
-      lastAuthUpdate DATETIME,
-      recoverCode VARCHAR(100),
       PRIMARY KEY (id_users))
     
     `);
@@ -112,7 +108,7 @@ async function main() {
   `);
     }
 
-    //   //introducir fotos faker
+    //introducir fotos faker
     console.log("Añadir fotos faker");
     const numeroFotos = 20;
 

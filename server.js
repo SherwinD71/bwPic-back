@@ -1,24 +1,41 @@
 require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
+const path = require("path");
 const isUser = require("./middlewares/isUser");
+const photoExists = require("./middlewares/photoExists");
+const userExists = require("./middlewares/userExists");
+const fileUpload = require("express-fileupload");
 const {
-  listEntries,
-  newEntry,
-  getEntry,
-  modEntry,
-  deleteEntry,
-} = require("./controllers/entries");
+  listPhotos,
+  newPhoto,
+  getPhoto,
+  votePhoto,
+  commentPhoto,
+} = require("./controllers/photos");
 
-const { newUser, loginUser } = require("./controllers/users");
+const {
+  newUser,
+  loginUser,
+  getUser,
+  editUser,
+  editUserPassword,
+} = require("./controllers/users");
 
-const { PORT, HOST } = process.env;
+const { PORT, HOST, UPLOAD_DIRECTORY } = process.env;
 
 const app = express();
 
 app.use(morgan("dev"));
 
 app.use(express.json());
+
+// middleware recursos statico
+app.use(express.static(path.join(__dirname, UPLOAD_DIRECTORY)));
+
+// body parser para la subida de imagenes (multipart form data)
+// multer o express-fileupload
+app.use(fileUpload());
 
 app.get("/", (req, res, next) => {
   res.send({
@@ -28,22 +45,32 @@ app.get("/", (req, res, next) => {
 });
 
 /*
-ENDPOINT ENTRIES
-*/
-app.get("/entries", listEntries);
-app.get("/entries/:id", getEntry);
-app.post("/entries", isUser);
-app.put("/entries/:id", modEntry);
-app.delete("/entries/:id", deleteEntry);
-
-/*
 ENDPOINT USUARIOS
 */
-
-// Nuevo usuario
+// POST - /users - Crear un usuario
 app.post("/users", newUser);
-// Login usuario
+// POST - /users/login - Hará el login de un usuario y devolverá el TOKEN
 app.post("/users/login", loginUser);
+// GET - /users/:id - Devolver información del usuario
+app.get("/users/:id", isUser, userExists, getUser);
+// PUT - /users/:id - Editar un usuario (name, email, avatar) | Solo el propio usuario
+app.put("/users/:id", isUser, userExists, editUser);
+// PUT - /users/:id/password - Editar la contraseña de un usuario | Solo el propio usuario
+app.put("/users/:id/password", isUser, userExists, editUserPassword);
+
+/*
+ENDPOINT PHOTOS
+*/
+// GET - /pothos/:id - devuelve las fotos
+app.get("/photos", listPhotos);
+// GET - /pothos/:id - devuelve los datos de una foto
+app.get("/photos/:id", isUser, getPhoto);
+// POST - /pothos/:id - añade una foto
+app.post("/photos", isUser, newPhoto);
+// POST - /pothos/:id/votes - vota una foto
+app.post("/photos/:id/vote", isUser, photoExists, votePhoto);
+// POST - /pothos/:id/votes - commenta una foto
+app.post("/photos/:id/comment", isUser, photoExists, commentPhoto);
 
 app.use((error, req, res, next) => {
   res.status(error.HttpStatus || 500).send({

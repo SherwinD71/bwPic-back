@@ -1,5 +1,5 @@
 const getDB = require("../../db");
-const { savePhoto, generateRandomString, sendMail } = require("../../helpers");
+const { savePhoto } = require("../../helpers");
 
 // dditar un usuario (name, email, avatar) | Solo el propio usuario
 const editUser = async (req, res, next) => {
@@ -11,7 +11,11 @@ const editUser = async (req, res, next) => {
     const { id } = req.params;
 
     // saco name, email desde el body
-    const { name, email } = req.body;
+    const { name, username } = req.body;
+
+    console.log("body", req.body);
+    console.log("name", name);
+    console.log("username", username);
 
     // comprobar que el usuario que quiero modificar es lo que hace login
     if (req.userAuth.id !== Number(id)) {
@@ -20,92 +24,31 @@ const editUser = async (req, res, next) => {
       throw error;
     }
 
-    // saco el avatar
-    if (req.files && req.files.avatar) {
-      // guardo la imagen del avatar en static/upload
-      const userAvatar = await savePhoto(req.files.avatar);
+    // saco userphoto
+    if (req.files && req.files.userphoto) {
+      // guardo la imagen del usuario en static/images
+      const userPhoto = await savePhoto(req.files.userphoto);
       // hago el update de la base de datos
       await connection.query("UPDATE users SET userphoto=? WHERE id_users=?", [
-        userAvatar,
+        userPhoto,
         id,
       ]);
     }
 
-    // leer los datos actuales del usuario
-    const [currentUser] = await connection.query(
+    // actualizo los datos en el DB
+    await connection.query(
       `
-        SELECT email
-        FROM users
+        UPDATE users
+        SET name=?, username=?
         WHERE id_users=?
-    `,
-      [id]
+      `,
+      [name, username, id]
     );
 
-    // si la email es distinta de la anterior
-    if (email && email !== currentUser[0].email) {
-      // comprobar si la nueva email ya existe en la tabla usuarios
-      const [existingEmail] = await connection.query(
-        `
-        SELECT id_users
-        FROM users
-        WHERE email=?
-      `,
-        [email]
-      );
-      if (existingEmail.length > 0) {
-        const error = new Error(
-          "El correo electronico ya existe en la base de datos"
-        );
-        error.httpStatus = 409;
-        throw error;
-      }
-
-      //   generar registration code
-      const registrationCode = generateRandomString();
-
-      // envio un correo con link de activacion:
-      // http://127.0.0.1:3000/users/validate/sbdhfbud809urut9304
-      const emailBody = `
-         Cambiaste el email en B&WPic.
-         Pulsa aqui para validar tu usuario: ${process.env.PUBLIC_HOST}/users/validate/${registrationCode}
-        `;
-
-      sendMail({
-        to: email,
-        subject: "Activa tu usuario de B&WPic",
-        body: emailBody,
-      });
-
-      // actualizar los datos en el DB (active=0)
-      await connection.query(
-        `
-                UPDATE users
-                SET name=?, email=?, lastAuthUpdate=?, active=0, registrationCode=?
-                WHERE id_users=?
-            `,
-        [name, email, new Date(), registrationCode, id]
-      );
-
-      res.send({
-        status: "ok",
-        message:
-          "Usuario actualizado. Valida la nueva email desde el correo que hemos enviado",
-      });
-    } else {
-      await connection.query(
-        `
-                UPDATE users
-                SET name=?
-                WHERE id_users=?
-            `,
-        [name, id]
-      );
-
-      res.send({
-        status: "ok",
-        message: "Usuario actualizado",
-      });
-    }
+    res.send({
+      status: "ok",
+      message: "Usuario actualizado",
+    });
   } catch (error) {
     next(error);
   } finally {

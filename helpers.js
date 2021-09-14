@@ -1,5 +1,5 @@
 const { format } = require("date-fns");
-const { ensureDir, unlink } = require("fs-extra");
+const { ensureDir } = require("fs-extra");
 const path = require("path");
 const sharp = require("sharp");
 const uuid = require("uuid");
@@ -10,7 +10,6 @@ function formatDateToDB(dateObject) {
 }
 
 const { UPLOAD_DIRECTORY } = process.env;
-console.log(UPLOAD_DIRECTORY);
 
 const uploadDir = path.join(__dirname, UPLOAD_DIRECTORY);
 
@@ -35,12 +34,6 @@ async function savePhoto(fotoData) {
 
   // devuelvo el nombre de la photo
   return saveImageName;
-}
-
-async function deletePhoto(imageName) {
-  const pathImage = path.join(uploadDir, imageName);
-  console.log(path.join(uploadDir, imageName));
-  await unlink(pathImage);
 }
 
 function generateRandomString() {
@@ -71,7 +64,6 @@ module.exports = {
   formatDateToDB,
   yourRandomGenerator,
   savePhoto,
-  deletePhoto,
   generateRandomString,
   validate,
 };
