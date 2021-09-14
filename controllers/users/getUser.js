@@ -18,19 +18,15 @@ const getUser = async (req, res, next) => {
       [id]
     );
 
-    // si el usuario logueado es admin o el usuario legueado cincide con
-    // el usuario de lo que pido info, devuelvo toda la información del usuario
     const userInfo = {
+      id: user[0].id_users,
+      date: user[0].created_at,
+      email: user[0].email,
       name: user[0].name,
-      avatar: user[0].avatar,
+      username: user[0].username,
+      avatar: user[0].userphoto,
+      role: user[0].role,
     };
-
-    if (user[0].id === req.userAuth.id || req.userAuth.role === "admin") {
-      //date, email, role
-      userInfo.date = user[0].date;
-      userInfo.email = user[0].email;
-      userInfo.role = user[0].role;
-    }
 
     res.send({
       status: "ok",

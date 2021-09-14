@@ -1,6 +1,6 @@
 const getDB = require("../../db");
 
-const getEntry = async (req, res, next) => {
+const getPhoto = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
@@ -38,4 +38,4 @@ const getEntry = async (req, res, next) => {
     if (connection) connection.release();
   }
 };
-module.exports = getEntry;
+module.exports = getPhoto;

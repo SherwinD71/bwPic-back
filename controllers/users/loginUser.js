@@ -41,7 +41,7 @@ const loginUser = async (req, res, next) => {
 
     // si todo está bien devolvemos un json con los datos de login
     const info = {
-      id: user[0].id,
+      id: user[0].id_users,
       role: user[0].role,
     };
 
