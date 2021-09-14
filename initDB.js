@@ -26,7 +26,7 @@ async function main() {
       userphoto VARCHAR(200),
       password VARCHAR(250) NOT NULL,
       created_at DATETIME NOT NULL,
-      active BOOLEAN DEFAULT false,
+      active BOOLEAN DEFAULT true,
       role ENUM("admin","normal") DEFAULT "normal" NOT NULL,
       registrationCode VARCHAR(100),
       deleted BOOLEAN DEFAULT false,

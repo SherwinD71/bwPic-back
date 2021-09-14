@@ -8,34 +8,35 @@ const deleteEntry = async (req, res, next) => {
 
     const { id } = req.params;
 
-    // Seleciono las fotos relacionadas con este ID
+    // Seleciono la fotos relacionada con este ID
     const [photos] = await connection.query(
       `
-      SELECT url FROM photos WHERE id_photos=?
+      SELECT * FROM photos WHERE id_photos=?
+    `,
+      [id]
+    );
+
+    // borro las immagen del disco
+
+    await deletePhoto([photos.url]);
+
+    // borro los votos
+    await connection.query(
+      `
+    DELETE FROM likes WHERE id_photos=?
+    `,
+      [id]
+    );
+
+    // borro los moentarios
+    await connection.query(
+      `
+    DELETE FROM comments WHERE id_photos=?
     `,
       [id]
     );
 
     // borro las tuplas en la tabla entries_photos
-    await connection.query(
-      `
-  DELETE FROM photos WHERE id_photos=?
-`,
-      [id]
-    );
-    // borro las immagenes desde el disco
-    for (const photo of photos) {
-      console.log(photo.photo);
-      await deletePhoto(photo.photo);
-    }
-    // borro los votos
-    await connection.query(
-      `
-  DELETE FROM likes WHERE id_photos=?
-`,
-      [id]
-    );
-    // borro la entry!!!!!
     await connection.query(
       `
   DELETE FROM photos WHERE id_photos=?
