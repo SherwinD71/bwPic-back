@@ -7,7 +7,6 @@ const isUser = async (req, res, next) => {
     connection = await getDB();
 
     const { authorization } = req.headers;
-    console.log("isUser");
 
     // comprobar que la petición tenga el token (authorization)
     if (!authorization) {

@@ -5,10 +5,7 @@ const userExists = async (req, res, next) => {
   try {
     connection = await getDB();
 
-    // saco el usuario desde la url
-    const { id } = req.params;
-
-    console.log("userExist");
+    console.log("userExist", req.userAuth.id);
 
     // saco la info del usuario
     const [user] = await connection.query(
@@ -17,7 +14,7 @@ const userExists = async (req, res, next) => {
      FROM users
      WHERE id_users=?
     `,
-      [id]
+      [req.userAuth.id]
     );
 
     if (!user[0]) {

@@ -1,13 +1,15 @@
 const getDB = require("../db");
 
-const entryExists = async (req, res, next) => {
+const photoExists = async (req, res, next) => {
   let connection;
   try {
     connection = await getDB();
 
     const { id } = req.params;
 
-    // comprobar si existe la entry
+    console.log("Photo exist");
+
+    // comprobar si existe la foto
     const [current] = await connection.query(
       `
      SELECT id_photos FROM photos WHERE id_photos=?
@@ -16,7 +18,7 @@ const entryExists = async (req, res, next) => {
     );
 
     if (current.length === 0) {
-      const error = new Error("No existe ninguna entrada con este id");
+      const error = new Error("No existe ninguna foto con este id");
       error.httpStatus = 404;
       throw error;
     }
@@ -29,4 +31,4 @@ const entryExists = async (req, res, next) => {
   }
 };
 
-module.exports = entryExists;
+module.exports = photoExists;

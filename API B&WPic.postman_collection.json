@@ -209,7 +209,13 @@
 					"name": "getPhoto",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2MzE2MzE0ODAsImV4cCI6MTYzNDIyMzQ4MH0.67HuHCevedaywZIEjt_AE4bo50EKbSWDEf_mP9U6IpM",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://127.0.0.1:3000/photos/1",
 							"protocol": "http",
@@ -235,10 +241,30 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2MzE2MzE0ODAsImV4cCI6MTYzNDIyMzQ4MH0.67HuHCevedaywZIEjt_AE4bo50EKbSWDEf_mP9U6IpM",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2MzE3MDU5NDQsImV4cCI6MTYzNDI5Nzk0NH0.Atr8AppszZcyPWn-fYJWpYELIx2f8einqBM3rgJWGTE",
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "place",
+									"value": "Esanatoglia",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Bonito pueblo de Italia",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/home/hackaboss/Imágenes/Esa2.jpeg"
+								}
+							]
+						},
 						"url": {
 							"raw": "http://127.0.0.1:3000/photos/",
 							"protocol": "http",
@@ -280,18 +306,18 @@
 					"response": []
 				},
 				{
-					"name": "votePhoto",
+					"name": "likePhoto",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2MzE2MzE0ODAsImV4cCI6MTYzNDIyMzQ4MH0.67HuHCevedaywZIEjt_AE4bo50EKbSWDEf_mP9U6IpM",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2MzE3MDU5NDQsImV4cCI6MTYzNDI5Nzk0NH0.Atr8AppszZcyPWn-fYJWpYELIx2f8einqBM3rgJWGTE",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:3000/photos/1/vote",
+							"raw": "http://127.0.0.1:3000/photos/2/like",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -302,8 +328,8 @@
 							"port": "3000",
 							"path": [
 								"photos",
-								"1",
-								"vote"
+								"2",
+								"like"
 							]
 						}
 					},
@@ -316,10 +342,19 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2MzE2MzE0ODAsImV4cCI6MTYzNDIyMzQ4MH0.67HuHCevedaywZIEjt_AE4bo50EKbSWDEf_mP9U6IpM",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsInJvbGUiOiJub3JtYWwiLCJpYXQiOjE2MzE3MDU5NDQsImV4cCI6MTYzNDI5Nzk0NH0.Atr8AppszZcyPWn-fYJWpYELIx2f8einqBM3rgJWGTE",
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"comment\":\"Foto muy bonita\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://127.0.0.1:3000/photos/1/comment",
 							"protocol": "http",

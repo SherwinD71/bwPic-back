@@ -1,13 +1,13 @@
 const listPhotos = require("./listPhotos");
 const newPhoto = require("./newPhoto");
 const getPhoto = require("./getPhoto");
-const votePhoto = require("./votePhoto");
+const likePhoto = require("./likePhoto");
 const commentPhoto = require("./commentPhoto");
 
 module.exports = {
   listPhotos,
   newPhoto,
   getPhoto,
-  votePhoto,
+  likePhoto,
   commentPhoto,
 };

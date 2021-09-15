@@ -5,25 +5,27 @@ const commentPhoto = async (req, res, next) => {
   try {
     connection = await getDB();
 
-    // codigo ...
-    const { id_photos } = req.body;
-    const { comment_text } = req.body;
-    const { id_users } = req.body;
+    const { id } = req.params;
 
-    //añado el comentario a la base de datos
+    const { comment } = req.body;
 
+    const now = new Date();
+
+    // añado el voto a la tabla
     await connection.query(
       `
-      INSERT INTO comments(comment_text, created_at, id_photos, id_users)
-      VALUES (?,?,?,?)
+        INSERT INTO comments (created_at, id_photos, id_users, comment_text)
+        VALUES (?,?,?,?)
     `,
-      [comment_text, new Date(), id_photos, id_users]
+      [now, id, req.userAuth.id, comment]
     );
 
     res.send({
       status: "ok",
-      message: "commentPhoto",
-      data: "data",
+      data: {
+        status: "ok",
+        message: "Nuevo comentario creado.",
+      },
     });
   } catch (error) {
     next(error);
