@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const path = require("path");
 const isUser = require("./middlewares/isUser");
 const photoExists = require("./middlewares/photoExists");
@@ -25,6 +26,8 @@ const {
 const { PORT, HOST, UPLOAD_DIRECTORY } = process.env;
 
 const app = express();
+
+app.use(cors());
 
 app.use(morgan("dev"));
 
