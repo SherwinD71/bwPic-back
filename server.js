@@ -10,7 +10,7 @@ const {
   listPhotos,
   newPhoto,
   getPhoto,
-  votePhoto,
+  likePhoto,
   commentPhoto,
 } = require("./controllers/photos");
 
@@ -47,6 +47,7 @@ app.get("/", (req, res, next) => {
 /*
 ENDPOINT USUARIOS
 */
+
 // POST - /users - Crear un usuario
 app.post("/users", newUser);
 // POST - /users/login - Hará el login de un usuario y devolverá el TOKEN
@@ -61,16 +62,17 @@ app.put("/users/:id/password", isUser, userExists, editUserPassword);
 /*
 ENDPOINT PHOTOS
 */
+
 // GET - /pothos/:id - devuelve las fotos
 app.get("/photos", listPhotos);
 // GET - /pothos/:id - devuelve los datos de una foto
-app.get("/photos/:id", isUser, getPhoto);
+app.get("/photos/:id", isUser, userExists, getPhoto);
 // POST - /pothos/:id - añade una foto
-app.post("/photos", isUser, newPhoto);
-// POST - /pothos/:id/votes - vota una foto
-app.post("/photos/:id/vote", isUser, photoExists, votePhoto);
-// POST - /pothos/:id/votes - commenta una foto
-app.post("/photos/:id/comment", isUser, photoExists, commentPhoto);
+app.post("/photos", isUser, userExists, newPhoto);
+// POST - /pothos/:id/like - like a una foto
+app.post("/photos/:id/like", isUser, userExists, photoExists, likePhoto);
+// POST - /pothos/:id/comment - commenta una foto
+app.post("/photos/:id/comment", isUser, userExists, photoExists, commentPhoto);
 
 app.use((error, req, res, next) => {
   res.status(error.HttpStatus || 500).send({
