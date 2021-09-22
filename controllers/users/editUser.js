@@ -11,11 +11,7 @@ const editUser = async (req, res, next) => {
     const { id } = req.params;
 
     // saco name, email desde el body
-    const { name, username } = req.body;
-
-    console.log("body", req.body);
-    console.log("name", name);
-    console.log("username", username);
+    const { name, username, email } = req.body;
 
     // comprobar que el usuario que quiero modificar es lo que hace login
     if (req.userAuth.id !== Number(id)) {
@@ -39,10 +35,10 @@ const editUser = async (req, res, next) => {
     await connection.query(
       `
         UPDATE users
-        SET name=?, username=?
+        SET name=?, username=?, email=?
         WHERE id_users=?
       `,
-      [name, username, id]
+      [name, username, email, id]
     );
 
     res.send({

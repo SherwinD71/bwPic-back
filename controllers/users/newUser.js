@@ -1,5 +1,5 @@
 const getDB = require("../../db");
-const { generateRandomString, validate } = require("../../helpers");
+const { validate } = require("../../helpers");
 const { newUserSchema } = require("../../schemas");
 
 const newUser = async (req, res, next) => {
@@ -8,7 +8,6 @@ const newUser = async (req, res, next) => {
     connection = await getDB();
 
     const { email, password, username, name } = req.body;
-    //console.log(email, password);
 
     // valido los datos del body
     await validate(newUserSchema, req.body);
@@ -28,10 +27,6 @@ const newUser = async (req, res, next) => {
       error.httpStatus = 409;
       throw error;
     }
-
-    // genero un registrationCode (ej: sbdhfbud809urut9304)
-    //const registrationCode = generateRandomString();
-    //console.log("registrationCode:", registrationCode);
 
     // añado el usuario a la base de datos (con registrationCode=sbdhfbud809urut9304)
     await connection.query(

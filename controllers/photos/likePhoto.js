@@ -44,8 +44,6 @@ const likePhoto = async (req, res, next) => {
       [id]
     );
 
-    console.log(newLikes);
-
     res.send({
       status: "ok",
       data: {

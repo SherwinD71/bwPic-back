@@ -8,7 +8,6 @@ const editUserPassword = async (req, res, next) => {
     const { id } = req.params;
 
     const { oldPassword, newPassword } = req.body;
-    console.log("editUserPassword", req.userAuth, id);
 
     // comprobar que el usuario que quiero modificar es lo que hace login
     if (req.userAuth.id !== Number(id)) {
