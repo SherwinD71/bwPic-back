@@ -13,7 +13,6 @@ const commentPhoto = async (req, res, next) => {
 
     const now = new Date();
 
-    // añado el voto a la tabla
     await connection.query(
       `
         INSERT INTO comments (created_at, id_photos, id_users, comment_text)
@@ -22,7 +21,6 @@ const commentPhoto = async (req, res, next) => {
       [now, id, req.userAuth.id, comment]
     );
 
-    // devuelvo numero commentario
     [result] = await connection.query(
       `
       SELECT id_photos, count(id_comments) AS nComentarios

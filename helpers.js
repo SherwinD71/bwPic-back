@@ -14,25 +14,12 @@ const { UPLOAD_DIRECTORY } = process.env;
 const uploadDir = path.join(__dirname, UPLOAD_DIRECTORY);
 
 async function savePhoto(fotoData) {
-  // fotoData tengo las informaciones de la imagen
-
-  // compruebo que exista el directorio donde quiero guardar las fotos (static/upload)
   await ensureDir(uploadDir);
-
-  // leer el buffer (fotoData.data) de la imagen (con sharp)
   const image = sharp(fotoData.data);
-
-  // hago un resize
   image.resize(400);
   image.grayscale();
-
-  // generar un nombre unico para la imagen (UUID)
   const saveImageName = `${uuid.v4()}.jpg`;
-
-  // guardo la imagen en static/images
   await image.toFile(path.join(uploadDir, saveImageName));
-
-  // devuelvo el nombre de la photo
   return saveImageName;
 }
 

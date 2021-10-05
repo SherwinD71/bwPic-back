@@ -5,7 +5,6 @@ const userExists = async (req, res, next) => {
   try {
     connection = await getDB();
 
-    // saco la info del usuario
     const [user] = await connection.query(
       `
      SELECT id_users

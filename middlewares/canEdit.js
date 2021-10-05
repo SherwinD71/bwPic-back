@@ -7,8 +7,6 @@ const canEdit = async (req, res, next) => {
 
     const { id } = req.params;
 
-    // controlo si el usuario logeado puede modificar la entry
-    // controlar el usuario que creó la entry, si no es el mismo del token o admin --> error
     const [current] = await connection.query(
       `
         SELECT id_users
@@ -22,7 +20,6 @@ const canEdit = async (req, res, next) => {
       current[0].user_id !== req.userAuth.id &&
       req.userAuth.role !== "admin"
     ) {
-      // ERROR
       const error = new Error(
         "No tienes los permisos para editar esta entrada"
       );
@@ -30,7 +27,6 @@ const canEdit = async (req, res, next) => {
       throw error;
     }
 
-    // Continuo en el siguiente middleware
     next();
   } catch (error) {
     next(error);

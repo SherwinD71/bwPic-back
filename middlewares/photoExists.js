@@ -7,7 +7,6 @@ const photoExists = async (req, res, next) => {
 
     const { id } = req.params;
 
-    // comprobar si existe la foto
     const [current] = await connection.query(
       `
      SELECT id_photos FROM photos WHERE id_photos=?

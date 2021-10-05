@@ -9,14 +9,12 @@ const editUserPassword = async (req, res, next) => {
 
     const { oldPassword, newPassword } = req.body;
 
-    // comprobar que el usuario que quiero modificar es lo que hace login
     if (req.userAuth.id !== Number(id)) {
       const error = new Error("No puedes cambiar la password de otro usuario");
       error.httpStatus = 403;
       throw error;
     }
 
-    // controlar que la antigua password sea correcta
     const [current] = await connection.query(
       `
       SELECT id_users
@@ -32,7 +30,6 @@ const editUserPassword = async (req, res, next) => {
       throw error;
     }
 
-    // guardamos en el DB la nueva password
     await connection.query(
       `
       UPDATE users

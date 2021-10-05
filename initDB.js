@@ -1,13 +1,11 @@
 require("dotenv").config();
-const faker = require("faker");
+
 const getDB = require("./db");
 const { formatDateToDB } = require("./helpers");
-const { yourRandomGenerator } = require("./helpers");
-const { random } = require("lodash");
+
 const axios = require("axios");
-const uuid = require("uuid");
+
 const fs = require("fs");
-const path = require("path");
 
 const { UPLOAD_DIRECTORY } = process.env;
 
@@ -115,90 +113,6 @@ async function main() {
         true, 
         "admin");
       `);
-
-    //introducir usuarios faker
-    // console.log("Añadir usuarios faker");
-
-    // const numeroUsers = 10;
-
-    // for (let index = 0; index < numeroUsers; index++) {
-    //   let time = yourRandomGenerator(20, 8, 2);
-    //   const entryPlaceImage = faker.image.avatar();
-    //   const imageName = `${uuid.v4()}.jpg`;
-    //   const imagePath = path.join(__dirname, UPLOAD_DIRECTORY, imageName);
-
-    //   await downloadImage(entryPlaceImage, imagePath);
-
-    //   await connection.query(`
-    //      INSERT INTO users (username, name, email, userphoto, password, created_at, active)
-    //      VALUES (
-    //        "${faker.internet.userName()}",
-    //        "${faker.name.firstName()}",
-    //        "${faker.internet.email()}",
-    //        "${imageName}",
-    //        SHA2("${faker.internet.password()}", 512),
-    //        "${formatDateToDB(time)}",
-    //        true
-    //          )
-    //      `);
-    // }
-
-    //introducir fotos faker
-    // console.log("Añadir fotos faker");
-    // const numeroFotos = 20;
-
-    // for (let index = 0; index < numeroFotos; index++) {
-    //   let time = yourRandomGenerator(20, 8, 2);
-    //   const entryPlaceImage = `https://source.unsplash.com/800x600/?place`;
-    //   const imageName = `${uuid.v4()}.jpg`;
-    //   const imagePath = path.join(__dirname, UPLOAD_DIRECTORY, imageName);
-
-    //   await downloadImage(entryPlaceImage, imagePath);
-
-    //   await connection.query(`
-    //          INSERT INTO photos (url, description, place, created_at, id_users)
-    //          VALUES (
-    //           "${imageName}",
-    //           "${faker.lorem.paragraph()}",
-    //           "${faker.address.city()}",
-    //           "${formatDateToDB(time)}",
-    //           "${random(2, numeroUsers + 1)}"
-    //  )
-    //  `);
-    // }
-
-    // crear comentarios
-    // console.log("Añadir comentario faker");
-    // const crearComentarios = 20;
-    // for (let index = 0; index < crearComentarios; index++) {
-    //   let time = yourRandomGenerator(20, 8, 2);
-    //   await connection.query(`
-    //  INSERT INTO comments (comment_text, created_at, id_photos, id_users)
-    // VALUES (
-
-    //         "${faker.lorem.words()}",
-    //         "${formatDateToDB(time)}",
-    //         "${random(1, numeroFotos)}",
-    //         "${random(1, numeroUsers + 1)}"
-
-    // )
-    // `);
-    // }
-
-    //   //generar votos
-    // const crearVotos = 20;
-
-    // for (let index = 0; index < crearVotos; index++) {
-    //   let time = yourRandomGenerator(20, 8, 2);
-    //   await connection.query(`
-    //   INSERT INTO likes (created_at, id_users, id_photos)
-    //   VALUES (
-    //            "${formatDateToDB(time)}",
-    //            "${random(2, numeroUsers + 1)}",
-    //            "${random(1, numeroFotos)}"
-    //   )
-    //   `);
-    // }
   } catch (error) {
     console.error(error);
   } finally {

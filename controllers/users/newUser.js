@@ -9,10 +9,8 @@ const newUser = async (req, res, next) => {
 
     const { email, password, username, name } = req.body;
 
-    // valido los datos del body
     await validate(newUserSchema, req.body);
 
-    // compruebo que no exista en la base de datos un usuario con esta email
     const [existingUser] = await connection.query(
       `
       SELECT id_users
@@ -28,7 +26,6 @@ const newUser = async (req, res, next) => {
       throw error;
     }
 
-    // añado el usuario a la base de datos (con registrationCode=sbdhfbud809urut9304)
     await connection.query(
       `
       INSERT INTO users(created_at,email,password, username, name)
@@ -37,7 +34,6 @@ const newUser = async (req, res, next) => {
       [new Date(), email, password, username, name]
     );
 
-    // mando una respuesta
     res.send({
       status: "ok",
       message: "Nuevo usuario creado.",

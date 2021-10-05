@@ -7,7 +7,6 @@ const likePhoto = async (req, res, next) => {
 
     const { id } = req.params;
 
-    // un usuario puede votar solo una vez
     const [existingVote] = await connection.query(
       `
       SELECT id_likes
@@ -25,7 +24,6 @@ const likePhoto = async (req, res, next) => {
 
     const now = new Date();
 
-    // añado el voto a la tabla
     await connection.query(
       `
         INSERT INTO likes (created_at, id_photos, id_users)
@@ -34,7 +32,6 @@ const likePhoto = async (req, res, next) => {
       [now, id, req.userAuth.id]
     );
 
-    // saco la nueva media de los votos
     const [newLikes] = await connection.query(
       `
         SELECT count(id_likes) AS numLikes

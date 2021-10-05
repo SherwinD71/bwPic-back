@@ -6,7 +6,6 @@ const listPhotos = async (req, res, next) => {
     connection = await getDB();
     let result;
 
-    // saco el query string
     const { search, order, direction, user } = req.query;
 
     const validOrders = ["created_at", "likes", "numComentarios"];
@@ -17,7 +16,6 @@ const listPhotos = async (req, res, next) => {
       ? direction
       : "DESC";
 
-    // trozo de query comun
     const queryListPhotos = `
     SELECT p.id_photos, url, p.place, p.created_at, p.id_users, username, userphoto, count(likes.id_photos) as likes, IFNULL(nComentarios, 0) as numComentarios
       FROM photos AS p

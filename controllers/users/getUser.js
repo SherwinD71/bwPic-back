@@ -5,10 +5,8 @@ const getUser = async (req, res, next) => {
   try {
     connection = await getDB();
 
-    // saco el usuario desde la url
     const { id } = req.params;
 
-    // saco la info del usuario
     const [user] = await connection.query(
       `
      SELECT id_users, created_at, email, name, username, userphoto , role
