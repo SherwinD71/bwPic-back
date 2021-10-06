@@ -7,7 +7,7 @@ const getPhoto = async (req, res, next) => {
 
     const { id } = req.params;
     const [result] = await connection.query(
-      `SELECT p.id_photos, url, description, place, p.created_at, p.id_users, userphoto, username, count(likes.id_photos) as likes
+      `SELECT p.id_photos, url, description, place, p.created_at, p.id_users, userphoto, username, users.created_at as fecharegistro, count(likes.id_photos) as likes
       FROM photos AS p
       LEFT JOIN likes ON (p.id_photos = likes.id_photos)
       LEFT JOIN users ON (p.id_users = users.id_users)

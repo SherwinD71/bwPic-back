@@ -17,7 +17,7 @@ const listPhotos = async (req, res, next) => {
       : "DESC";
 
     const queryListPhotos = `
-    SELECT p.id_photos, url, p.place, p.created_at, p.id_users, username, userphoto, count(likes.id_photos) as likes, IFNULL(nComentarios, 0) as numComentarios
+    SELECT p.id_photos, url, p.place, p.created_at, p.id_users, username, users.created_at as fecharegistro, userphoto, count(likes.id_photos) as likes, IFNULL(nComentarios, 0) as numComentarios
       FROM photos AS p
       LEFT JOIN likes ON (p.id_photos = likes.id_photos)
       LEFT JOIN users ON (p.id_users = users.id_users)
